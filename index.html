@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+    <title>نتائج الدفعة 51 – الدور الثاني – السنة الثالثة – كلية الطب البشري</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js">
+    </script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', 'Segoe UI', Tahoma, sans-serif;
+        }
+        body {
+            background: linear-gradient(145deg, #eef2f5 0%, #d4dee8 100%);
+            min-height: 100vh;
+            padding: 30px 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .system-container {
+            max-width: 1350px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(10px);
+            border-radius: 56px;
+            box-shadow: 0 30px 55px -15px rgba(0, 0, 0, 0.35);
+            padding: 35px 30px;
+            border: 1px solid rgba(255, 255, 255, 0.7);
+        }
+        .university-header {
+            text-align: center;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .uni-faculty-container {
+            background: linear-gradient(135deg, #1e3a5f, #0a2f44);
+            color: white;
+            padding: 25px 50px;
+            border-radius: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 25px -10px rgba(10, 47, 68, 0.5);
+            border: 2px solid #d4a76a;
+            width: fit-content;
+        }
+        .uni-faculty-container h1 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+        }
+        .uni-faculty-container h2 {
+            font-size: 2.2rem;
+            color: #f5dba8;
+            font-weight: 700;
+            margin-top: 5px;
+        }
+        .program-badge {
+            background: #ffffff;
+            color: #1e3a5f;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 40px;
+            border-radius: 60px;
+            font-size: 1.6rem;
+            font-weight: 800;
+            border: 3px solid #f5b041;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 25px;
+        }
+        .stats-toggle-btn {
+            background: linear-gradient(135deg, #f5b041, #f39c12);
+            border: none;
+            color: white;
+            font-size: 1.25rem;
+            font-weight: 800;
+            padding: 12px 32px;
+            border-radius: 50px;
+            cursor: pointer;
+            display: block;
+            margin: 30px auto;
+            box-shadow: 0 8px 18px rgba(243, 156, 18, 0.3);
+            transition: 0.25s;
+            width: fit-content;
+        }
+        .stats-toggle-btn:hover {
+            transform: translateY(-3px);
+        }
+        .stats-container {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s ease-in-out, padding 0.4s;
+            background: white;
+            border-radius: 40px;
+            margin: 0 auto;
+            width: 98%;
+            opacity: 0;
+        }
+        .stats-container.active {
+            max-height: 1200px;
+            padding: 25px;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.1);
+            margin-bottom: 35px;
+            opacity: 1;
+            border: 1px solid #e2eef9;
+        }
+        .stats-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+        .stat-card {
+            background: #f8fcff;
+            border-radius: 28px;
+            padding: 15px 20px;
+            text-align: center;
+            min-width: 130px;
+            flex: 1;
+            border: 1px solid #cde3f2;
+            transition: transform 0.2s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: #fffef7;
+        }
+        .stat-card .title {
+            font-size: 1rem;
+            color: #1e3a5f;
+            font-weight: 800;
+        }
+        .stat-card .val {
+            font-size: 2rem;
+            font-weight: 900;
+            color: #0a2f44;
+        }
+        .stat-card .perc {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: #e67e22;
+            background: #fef0e0;
+            display: inline-block;
+            padding: 2px 12px;
+            border-radius: 40px;
+            margin-top: 5px;
+        }
+        .success-rate-card {
+            background: linear-gradient(135deg, #d4fc79, #96e6a1);
+            border: 2px solid #2e7d32;
+        }
+        .success-rate-card .title {
+            color: #1b5e20;
+            font-size: 1.1rem;
+        }
+        .success-rate-card .val {
+            color: #1b5e20;
+            font-size: 2.4rem;
+        }
+
+        .charts-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+        .chart-box {
+            background: #ffffffdd;
+            padding: 15px;
+            border-radius: 28px;
+            width: 45%;
+            min-width: 280px;
+        }
+
+        .search-card {
+            background: white;
+            border-radius: 100px;
+            padding: 7px 7px 7px 20px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 18px 32px -12px rgba(0, 0, 0, 0.2);
+            margin-bottom: 38px;
+            margin-top: 30px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            background: linear-gradient(white, white) padding-box, linear-gradient(135deg, #f5b041, #e67e22) border-box;
+        }
+        .search-card:focus-within {
+            box-shadow: 0 20px 35px -10px rgba(245, 176, 65, 0.4);
+            transform: scale(1.01);
+        }
+        .search-card input {
+            flex: 1;
+            border: none;
+            padding: 16px 20px;
+            font-size: 1.2rem;
+            border-radius: 80px;
+            background: transparent;
+            font-weight: 600;
+            color: #0a2f44;
+            direction: ltr;
+            text-align: center;
+            outline: none;
+        }
+        .search-card input::placeholder {
+            color: #a0b8ce;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        .search-card button {
+            background: linear-gradient(115deg, #1e3a5f, #2c5a7a);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 800;
+            padding: 12px 36px;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .search-card button:hover {
+            background: linear-gradient(115deg, #0f2c40, #1e4a6e);
+            transform: scale(0.97);
+        }
+        .search-card button::before {
+            content: "🔍";
+            font-size: 1.3rem;
+        }
+
+        .student-result {
+            background: rgba(255, 255, 245, 0.7);
+            backdrop-filter: blur(8px);
+            border-radius: 48px;
+            padding: 20px 25px 30px;
+            border: 1px solid rgba(255, 255, 210, 0.9);
+            box-shadow: 0 20px 30px -15px rgba(0, 0, 0, 0.15);
+        }
+        .student-header {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            background: linear-gradient(125deg, #0a2f44, #124263);
+            color: white;
+            padding: 18px 30px;
+            border-radius: 48px;
+            margin-bottom: 25px;
+        }
+        .student-name {
+            font-size: 1.9rem;
+            font-weight: 800;
+        }
+        .student-id {
+            background: #f5b041;
+            padding: 10px 28px;
+            border-radius: 60px;
+            font-weight: 800;
+            font-size: 1.7rem;
+            color: #202020;
+        }
+
+        .grades-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+            margin-bottom: 24px;
+        }
+        .grades-table th {
+            background: #1e3a5f;
+            color: white;
+            padding: 16px 8px;
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+        .grades-table th:first-child {
+            border-radius: 0 15px 15px 0;
+        }
+        .grades-table th:last-child {
+            border-radius: 15px 0 0 15px;
+        }
+        .grades-table td {
+            padding: 14px 8px;
+            text-align: center;
+            background: white;
+            font-weight: 600;
+            color: #153e57;
+            border-top: 1px solid #eef2f5;
+            border-bottom: 1px solid #eef2f5;
+            vertical-align: middle;
+        }
+        .grades-table tr td:first-child {
+            border-right: 1px solid #eef2f5;
+            border-radius: 0 20px 20px 0;
+            background: linear-gradient(120deg, #fef9e6, #fff6e6);
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #8B4513;
+            text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.05);
+            width: 22%;
+            box-shadow: inset 0 0 0 1px #fff8, 0 2px 5px rgba(0, 0, 0, 0.05);
+        }
+        .grades-table tr td:first-child span {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(245, 176, 65, 0.2);
+            padding: 8px 18px;
+            border-radius: 60px;
+        }
+        .grades-table tr td:last-child {
+            border-left: 1px solid #eef2f5;
+            border-radius: 15px 0 0 15px;
+        }
+        .grades-table tr:hover td {
+            background: #fffcf5;
+            border-color: #f5dba8;
+        }
+
+        .numeric-cell {
+            display: inline-block;
+            background: #fdfaf4;
+            border: 2px solid #e2b87a;
+            color: #8B4513;
+            font-weight: 900;
+            font-size: 1.1rem;
+            padding: 6px 16px;
+            border-radius: 15px;
+            min-width: 80px;
+        }
+        .score-info {
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #2c6e9e;
+            background: #f0f6fc;
+            border-radius: 12px;
+            padding: 4px 8px;
+            margin-top: 6px;
+            display: inline-block;
+            text-align: center;
+            direction: ltr;
+        }
+        .grade-badge {
+            display: inline-block;
+            padding: 8px 22px;
+            border-radius: 50px;
+            font-weight: 900;
+            font-size: 1rem;
+            color: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        .grade-badge.excellent {
+            background: #27ae60;
+        }
+        .grade-badge.verygood {
+            background: #82e0aa;
+            color: #0a2f44;
+        }
+        .grade-badge.good {
+            background: #3498db;
+        }
+        .grade-badge.pass {
+            background: #f39c12;
+        }
+        .grade-badge.fail {
+            background: #e74c3c;
+        }
+
+        .final-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+            background: #eef2f0aa;
+            padding: 25px 20px;
+            border-radius: 48px;
+            margin: 25px 0 30px;
+            border: 1px solid #ffdd99;
+        }
+        .summary-item {
+            background: white;
+            padding: 15px 40px;
+            border-radius: 80px;
+            text-align: center;
+            min-width: 200px;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.08);
+            transition: transform 0.2s;
+        }
+        .summary-item:hover {
+            transform: translateY(-3px);
+            background: #fffef5;
+        }
+        .summary-item .label {
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            display: block;
+        }
+        .summary-item .value {
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: #0b3b5c;
+            line-height: 1.2;
+        }
+        .grade-value {
+            background: linear-gradient(135deg, #f9f3e0, #fff5e8);
+            border-radius: 30px;
+            padding: 12px 24px;
+            display: inline-block;
+            font-weight: 900;
+        }
+
+        .signatures {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 50px;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px dashed #d4a76a;
+        }
+        .signature-item {
+            text-align: center;
+            min-width: 220px;
+        }
+        .signature-title {
+            font-weight: 800;
+            color: #1f5e8e;
+            margin-bottom: 12px;
+            font-size: 1.1rem;
+        }
+        .signature-name {
+            font-weight: 700;
+            color: #2c3e50;
+            font-size: 1.2rem;
+        }
+
+        .designer-badge {
+            margin: 25px auto 10px;
+            background: linear-gradient(135deg, #fef9e7, #fdebd0);
+            border: 2px solid #d4a76a;
+            border-radius: 60px;
+            padding: 12px 30px;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: 0 8px 20px rgba(212, 167, 106, 0.25);
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #5d4037;
+            transition: transform 0.2s;
+            width: fit-content;
+        }
+        .designer-badge:hover {
+            transform: scale(1.02);
+        }
+        .designer-badge .icon {
+            font-size: 2.2rem;
+            line-height: 1;
+        }
+        .designer-badge .text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        .designer-badge .text .title {
+            font-size: 0.9rem;
+            color: #8d6e63;
+            font-weight: 600;
+        }
+        .designer-badge .text .name {
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: #3e2723;
+            letter-spacing: 0.5px;
+        }
+
+        .print-btn {
+            background: #2c5a7a;
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            padding: 12px 38px;
+            border-radius: 60px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        .footer-note {
+            margin-top: 30px;
+            text-align: center;
+            background: #eef3f9aa;
+            padding: 14px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: #1e4663;
+        }
+
+        .security-note {
+            font-size: 0.8rem;
+            color: #e67e22;
+            background: #fff3e0;
+            border-radius: 30px;
+            padding: 6px 15px;
+            display: inline-block;
+            margin-top: 8px;
+        }
+
+        @media print {
+            @page {
+                size: A4;
+                margin: 0.5cm;
+            }
+            body {
+                background: white;
+                padding: 0;
+                margin: 0;
+                font-size: 11px;
+            }
+            .system-container {
+                background: white !important;
+                padding: 0.3cm !important;
+                box-shadow: none !important;
+                max-width: 100%;
+            }
+            .stats-toggle-btn,
+            .stats-container,
+            .search-card,
+            .print-btn,
+            .footer-note,
+            .designer-badge {
+                display: none !important;
+            }
+            .student-result {
+                background: white !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            .student-header {
+                background: #0a2f44 !important;
+                padding: 6px 12px !important;
+                margin-bottom: 8px !important;
+                border-radius: 12px !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .student-name {
+                font-size: 1.2rem !important;
+            }
+            .student-id {
+                font-size: 1rem !important;
+                padding: 4px 12px !important;
+            }
+            .grades-table {
+                margin-bottom: 8px !important;
+            }
+            .grades-table th {
+                background: #1e3a5f !important;
+                color: white !important;
+                padding: 6px 4px !important;
+                font-size: 0.9rem !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .grades-table td {
+                padding: 6px 4px !important;
+                font-size: 0.85rem !important;
+            }
+            .grades-table tr td:first-child {
+                font-size: 1rem !important;
+                padding: 4px !important;
+            }
+            .grades-table tr td:first-child span {
+                padding: 2px 8px !important;
+            }
+            .numeric-cell {
+                padding: 2px 8px !important;
+                font-size: 0.85rem !important;
+                min-width: 60px;
+            }
+            .score-info {
+                font-size: 0.6rem !important;
+                padding: 2px 4px !important;
+            }
+            .grade-badge {
+                padding: 3px 10px !important;
+                font-size: 0.75rem !important;
+            }
+            .final-summary {
+                padding: 6px !important;
+                margin: 6px 0 !important;
+                gap: 8px;
+            }
+            .summary-item {
+                padding: 6px 12px !important;
+                min-width: 110px !important;
+            }
+            .summary-item .label {
+                font-size: 0.7rem !important;
+            }
+            .summary-item .value {
+                font-size: 1.1rem !important;
+            }
+            .grade-value {
+                padding: 4px 12px !important;
+            }
+            .signatures {
+                margin-top: 8px !important;
+                padding-top: 8px !important;
+                gap: 20px;
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+            .signature-item {
+                min-width: 150px;
+            }
+            .signature-title {
+                font-size: 0.75rem !important;
+                margin-bottom: 4px;
+            }
+            .signature-name {
+                font-size: 0.85rem !important;
+            }
+            .program-badge {
+                font-size: 0.8rem !important;
+                padding: 4px 12px !important;
+                margin-bottom: 6px !important;
+            }
+            .uni-faculty-container {
+                padding: 6px 15px !important;
+                margin-bottom: 6px !important;
+            }
+            .uni-faculty-container h1 {
+                font-size: 1.2rem !important;
+            }
+            .uni-faculty-container h2 {
+                font-size: 0.9rem !important;
+            }
+            .student-header,
+            .grades-table,
+            .final-summary,
+            .signatures {
+                page-break-inside: avoid;
+                break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="system-container">
+        <div class="university-header">
+            <div class="uni-faculty-container">
+                <h1>🏛️ جامعة بنغازي</h1>
+                <h2>كلية الطب البشري</h2>
+            </div>
+            <div class="program-badge">🎓 نتيجة السنة الثالثة – الدفعة 51 – الدور الثاني 2025-2026</div>
+        </div>
+
+        <button class="stats-toggle-btn" id="statsToggleBtn">📊 عرض الإحصائيات العامة للنتيجة (الدور الثاني)</button>
+        <div class="stats-container" id="statsContainer">
+            <h3 style="text-align:center; color:#0a2f44;">إحصائيات عامة – دفعة 51 – الدور الثاني (بيانات صحيحة)</h3>
+            <div class="stats-cards" id="statsCardsHTML"></div>
+            <div class="charts-row">
+                <div class="chart-box"><canvas id="passFailChart"></canvas></div>
+                <div class="chart-box"><canvas id="gradesChart"></canvas></div>
+            </div>
+        </div>
+
+        <div class="search-card">
+            <input type="text" id="studentIdInput" placeholder="🔒 أدخل رقمك الدراسي الشخصي" dir="ltr" />
+            <button id="searchBtn">عرض النتيجة</button>
+        </div>
+        <div style="text-align: center; margin-top: -25px; margin-bottom: 20px;">
+            <span class="security-note">⚠️ لا يمكن الاطلاع على النتيجة إلا بإدخال الرقم الصحيح الخاص بك</span>
+        </div>
+
+        <div id="resultContainer" class="student-result">
+            <div style="text-align:center; padding:50px 20px;">
+                <span style="font-size:1.8rem; font-weight:700; color: #1e3a5f;">📘 أدخل رقمك الدراسي بدقة</span><br />
+                <span style="color:#2c6e9e;">النتيجة خاصة بصاحب الرقم فقط، ولن تظهر لأي شخص آخر</span>
+            </div>
+        </div>
+
+        <!-- شارة تصميم وإعداد المنظومة -->
+        <div style="display: flex; justify-content: center; margin-top: 25px;">
+            <div class="designer-badge">
+                <span class="icon">⚙️✨</span>
+                <span class="text">
+                    <span class="title">تصميم واعداد المنظومة</span>
+                    <span class="name">د. صالح الاوجلي <span style="font-weight:400; font-size:0.9rem; color:#6d4c41;">رئيس قسم الدراسة والامتحانات</span></span>
+                </span>
+            </div>
+        </div>
+
+        <div class="footer-note">
+            🔹 <strong>ملاحظات هامة (الدور الثاني – السنة الثالثة):</strong><br />
+            - النتيجة النهائية تعتمد على مجموع الدرجات في المواد الأربعة (علم الأدوية، علم الأمراض، علم الجراثيم، علم الطفيليات).<br />
+            - يشترط للنجاح العام الحصول على تقدير "مقبول" فما فوق في كافة المواد.<br />
+            - يتم احتساب التقدير العام بناءً على المجموع الكلي (من أصل 900 درجة).<br />
+            - البيانات مأخوذة من كشف نتيجة الدور الثاني للعام 2025-2026.
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        // البيانات الخام من ملف الإكسل (السنة الثالثة – الدفعة 51 – الدور الثاني)
+        // تم استخراجها من النص المرفق، كل صف يحتوي على:
+        // [الرقم المسلسل, الرقم الدراسي, الاسم, علم الأدوية, , علم الأمراض, , علم الجراثيم, , علم الطفيليات, , الغياب, المجموع, ...]
+        // ============================================================
+        const rawData = `
+1 | 1273 | رقية فرج سعد | 0 | 180 | 130 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |
+2 | 4814 | حنين عبدالرحيم محمد التواتي | 120 | 138 | 84 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+3 | 4956 | مجدي سالم محمد القماطي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+4 | 5245 | حاتم عبدالله حسين الكيش | 195 | 180 | 60 | 62 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+5 | 5654 | فريحة عبدالكريم جمعة | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+6 | 5900 | ايمان رمضان ابراهيم | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+7 | 6967 | أمل فرج سعد العوامي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+8 | 7213 | الحسين يوسف سالم البرغثي | 180 | 0 | 0 | 60.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+9 | 7362 | رافع شعبان عبدالنبي | 0 | 0 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+10 | 7378 | رشا عبدالرحيم صالح الوزري | 180 | 195.93 | 135.65 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+11 | 7391 | ايمان حسن صالح الاوجلي | 0 | 0 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+12 | 8027 | مراد علي عبدالواحد محمد | 78.5 | 220 | 126 | 70 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+13 | 8310 | سالمة عيسى بركة | 0 | 181 | 122 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+14 | 8519 | محمد علي محمد نتفة | 182 | 201 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+15 | 8953 | غادة احمد فيتور حديدان | 0 | 209 | 0 | 82 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+16 | 9043 | ايمان علي ادم مصباح | 0 | 0 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+17 | 9085 | نجاة سعيد عبدالرازق سعيد | 0 | 0 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+18 | 9504 | ايمن خالد اسماعيل عبدالله | 192 | 0 | 130 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+19 | 9601 | مبروكة علي الصادق | 0 | 180 | 36 | 65.53 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+20 | 10340 | مروان عوض عبدالرحمن احميدة | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+21 | 10614 | علي مصطفى محمد النائلي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+22 | 10902 | مرعية فرج حسين عبدالسلام | 181.1 | 197.71 | 134 | 66.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+23 | 11091 | مريم مفتاح سالم الهنيد | 0 | 0 | 120 | 0 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+24 | 11342 | السنوسي مفتاح الساعدي | 0 | 180 | 120 | 90 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+25 | 11598 | حليمة مسعود سعد المسلاتي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+26 | 11599 | وائل خليفة الناجي المسماري | 54 | 131.71428571428572 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+27 | 11672 | سمية فرج محمد | 0 | 185.79 | 0 | 0 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+28 | 11679 | علياء محمد على حسن | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+29 | 11687 | هاشم عبدالحميد مفتاح الشيباني | 180.5 | 0 | 120 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+30 | 12358 | نوال ناجي فرج عبدالنبي | 186 | 133.39285714285714 | 106 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+31 | 12411 | فاطمة عبدالسلام يوسف سعيد | 180 | 0 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+32 | 12467 | شريفة محمد عبدالله التواتي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+33 | 12469 | معتز الناجي عمران الفرجاني | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+34 | 12535 | مهند سليمان مفتاح كويري | 166.5 | 210.75 | 120 | 75.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+35 | 12723 | حنين مرعي عبدالله علي | 0 | 0 | 0 | 70 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+36 | 12770 | فاطمة صالح عبدالسلام | 172.5 | 187 | 113 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+37 | 12859 | مالك عبدالسلام عبدالمولى | 0 | 0 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+38 | 12956 | غفران محمد عبدالنور | 24 | 0 | 34 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+39 | 12969 | آية فؤاد بوبكر العبيدي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+40 | 12981 | هاجر السنوسي بوزريبة شقلوف | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+41 | 13003 | ايمان سليمان عيسى الحرير | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+42 | 13198 | عائشة أحمد أبشر | 267 | 214.67857142857144 | 172 | 85 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+43 | 13560 | هاجر ميلود كامل الذراف | 88 | 106.5 | 93 | 37.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+44 | 13570 | ندى محمد خليفة بوقرين | 0 | 180.25 | 0 | 0 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+45 | 13637 | عبير عمر ارويحل محمد | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+46 | 13658 | ياسين ميلود بن عروس منصور | 182.35 | 197.75 | 109 | 67.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+47 | 13697 | اماني خالد إبراهيم عبدالجليل | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+48 | 13745 | فادية مفتاح محمد الجديد | 181.06 | 180.11 | 130 | 69.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+49 | 13760 | سندس عبدالقادر بوعجيلة الشيخي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+50 | 13761 | أنس مفتاح مسعود عثمان | 137.5 | 157.75 | 108 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+51 | 13766 | استبرق محمد مصطفى ابوسبولة | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+52 | 13874 | أحمد محمود المبروك حمد | 180.35 | 180.03571428571428 | 132 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+53 | 13892 | مودة سالم علي محمد | 0 | 0 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+54 | 13911 | عبدالمالك إبراهيم امين شاكير | 0 | 0 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+55 | 13918 | فاتن محمد إمحمد القزيري | 101 | 105.78571428571429 | 70 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+56 | 13924 | فاطمة ابوالعبد فرج خليل | 180 | 199.89285714285717 | 120.6 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+57 | 13978 | مازن خليل عرفات | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+58 | 14027 | رندة رمضان عمر علي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+59 | 14217 | أحمد صابر محارب | 180 | 144.35714285714286 | 89 | 75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+60 | 14249 | ساري عبد المجيد محمد | 189.75 | 152.17857142857144 | 121 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+61 | 14256 | محمد أحمد مفتاح | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+62 | 14287 | أماني عبدالعالى موسى المهشهش | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+63 | 14330 | صالحه عبدالناصر عمران | 29.5 | 72.25 | 43 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+64 | 14379 | محمد مختار عيسى الفرجاني | 0 | 232.96 | 134 | 62.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+65 | 14426 | إسراء رزق الله طاهر | 55.5 | 37 | 8 | 9.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+66 | 14465 | إيناس طاهر علي | 97.25 | 109.89285714285714 | 47 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+67 | 14466 | حنين سعد محمد مضوي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+68 | 14527 | آية علي رمضان | 0 | 84.64285714285714 | 17 | 14.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+69 | 14537 | سليمه عياد ابوبكر | 180 | 169.57142857142858 | 120 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+70 | 14757 | محمد رمضان المبروك عطية | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+71 | 14801 | هبة المبروك علي | 108.25 | 141 | 76 | 36.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+72 | 14915 | فاطمة عبدالعزيز عمر صالح | 0 | 180 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+73 | 15026 | أحمد حافظ صالح البرعصي | 192 | 0 | 0 | 0 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+74 | 15029 | هناء عبدالحميد إبراهيم عبدالسلام | 114 | 172.89285714285717 | 91 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+75 | 15071 | رمضان جادالله رمضان اطوير | 186.1 | 183.7 | 74 | 69 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+76 | 15097 | صالح يوسف صالح الشاوش | 0 | 0 | 120 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+77 | 15104 | صفاء جمعة محمد رمضان | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+78 | 15129 | مختار يسري مختار السنوسي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+79 | 15157 | علاء إحميدة محمد الحداد | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+80 | 15158 | حواء المبروك صالح العقوري | 148.75 | 150.42857142857144 | 125.1 | 75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+81 | 15198 | ملاك عبدالباسط محمد المسماري | 180 | 186.25 | 104 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+82 | 15257 | ناريمان يحيي سليمان محمود | 183.25 | 57 | 23 | 69.72 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+83 | 15272 | عبدالله علي محمد الجهاني | 200.8 | 193.25 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+84 | 15324 | نجوى اسماعيل محمد موسى | 198.1 | 204.89285714285717 | 120.4 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+85 | 15327 | نوال محمود خليل أحمد | 0 | 0 | 0 | 12 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+86 | 15337 | إنتصار فؤاد عبدالتواب عبدالعزيز | 110.5 | 156.35714285714286 | 0 | 43.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+87 | 15347 | أسماء أحمد عمران العلواني | 186.85 | 0 | 122 | 63 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+88 | 15386 | محمد ونيس محمد ونيس | 78.75 | 138 | 0 | 44.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+89 | 15413 | محمد فتح الله محمد طاهر | 180 | 182.75 | 96 | 60.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+90 | 15414 | محمد صالح سالم علي | 221.73 | 0 | 0 | 65.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+91 | 15435 | منذر محمد محمد مفتاح | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+92 | 15453 | احمد رزق الله عبدالواحد الفاخري | 0 | 0 | 0 | 61.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+93 | 15480 | محمد عمر محمد القندي | 80 | 73.89285714285714 | 74 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+94 | 15483 | سوسن علي حسن عمران | 109.5 | 151.14285714285714 | 95 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+95 | 15495 | نها سعيد المهدي سعيد | 193.7 | 198.96 | 26 | 68.13 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+96 | 15496 | خديجة محمود صالح محمد | 0 | 0 | 25 | 0 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+97 | 15500 | ملاك حسين عوض حسين | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+98 | 15551 | عبدالمالك حسن مسعود الريشي | 180 | 186.3 | 0 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+99 | 15554 | ملاك سعد محمد الكيلاني | 0 | 0 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+100 | 15562 | عائشة ناصر علي العمامي | 0 | 0 | 110 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+101 | 15575 | امينة ونيس سلطان محمد | 180 | 137.60714285714286 | 120.6 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+102 | 15577 | منى رمضان انور عبدالفضيل | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+103 | 15578 | عائشة فتحي بشير علي | 0 | 82.5 | 41 | 0 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+104 | 15624 | مروة صابر غيضان العبيدي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+105 | 15661 | قمرعبدالله خليفة | 93 | 166.60714285714286 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+106 | 15663 | الخضر عيون السنوسي خميس | 226.5 | 0 | 0 | 76.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+107 | 15664 | مراد فرج شعيب محمد | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+108 | 15681 | ايمان حسين محمد | 0 | 49.5 | 0 | 62.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+109 | 15709 | هبة محمود علي محمود | 0 | 0 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+110 | 15720 | محمد فتحي سعد محمد | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+111 | 15724 | حواء ابراهيم سعد العبيدي | 180 | 115.07142857142858 | 90 | 46.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+112 | 15727 | فاطمة إدريس صالح إمراجع | 208.5 | 192.10714285714286 | 92 | 60.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+113 | 15749 | حنين عبدالوهاب سعد إكريم | 128.75 | 0 | 80 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+114 | 15757 | سناء مسلم حسن علي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+115 | 15765 | هند فائز حسين المرغني | 120.25 | 183.89 | 97 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+116 | 15819 | إيناس فرج عبدالقادر الخفيفي | 164.5 | 193.21428571428572 | 107 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+117 | 15825 | آية فرج عبدالسلام بوعيشة | 0 | 0 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+118 | 15827 | أحمد عمر مفتاح منصور | 0 | 100.17857142857143 | 72 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+119 | 15845 | أمنة جمال عبدالله الشويهدي | 189 | 158.46428571428572 | 95 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+120 | 15865 | فاطمة احمد سيدي بشير | 141.5 | 122.82142857142857 | 96 | 47 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+121 | 15901 | إبتسام الشريف سالم القويري | 123.5 | 180.18 | 91 | 61.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+122 | 15949 | أم العز عبدالناصر الجحاوي | 109 | 187.82142857142858 | 134 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+123 | 15994 | إبراهيم خالد إبراهيم سعد | 185.5 | 0 | 0 | 68.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+124 | 16004 | بشرى فرج السنوسي عثمان | 0 | 0 | 120 | 0 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+125 | 16036 | آية صالح فرج ابراهيم | 125 | 180.71 | 99 | 61 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+126 | 16079 | عبدالرحمن محمد البوسيفي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+127 | 16083 | هناء مراد إبراهيم بوزريبة | 0 | 0 | 0 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+128 | 16134 | سالم فرج سالم الكوم | 0 | 201.55 | 0 | 62 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+129 | 16138 | إبراهيم خالد إبراهيم مرواس | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+130 | 16151 | خلود فرج صالح يونس | 115 | 97.67857142857143 | 70 | 10 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+131 | 16164 | منية عبدالرحيم علي محمد | 110.5 | 114.85714285714286 | 67 | 32 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+132 | 16182 | أحمد عزالدين مسعود افتيتة | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+133 | 16189 | نورالهدى عبدالله سعد مسعود | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+134 | 16229 | آلاء فهمي علي الشهيبية | 174 | 180.46 | 120 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+135 | 16252 | أمينة عزالدين محمد الدالي | 187.06 | 116.60714285714286 | 120.3 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+136 | 16302 | خديجة وليد محمد | 140.5 | 180.29 | 102 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+137 | 16313 | رانيا عمر حسين العرفي | 167.75 | 221.75 | 126 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+138 | 16363 | سندس عيسى علي محمد | 0 | 189.75 | 124 | 63.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+139 | 16394 | عائشة رافع محمد حسين | 68 | 218 | 67 | 75.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+140 | 16410 | نادين مجدي حامد | 180 | 197.85714285714286 | 133 | 60.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+141 | 16452 | سالمة بلعيد علي الصفراني | 226.1 | 165.21428571428572 | 69 | 60.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+142 | 16476 | سارة محمد علي يحيى الغرياني | 144.75 | 169.67857142857144 | 121 | 66.88 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+143 | 16479 | أحمد مؤمن إبراهيم الغيثي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+144 | 16501 | ناريمان امين فكري الهواري | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+145 | 16542 | حموده عطوه حموده ابراهيم | 180 | 192.07142857142858 | 120.53 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+146 | 16543 | إيهاب عبدالرحمن امحمد أبوزيد | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+147 | 16545 | نجية منذر أحمد بن علي | 163 | 181.5 | 120 | 65.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+148 | 16550 | آية جابر عبدالقادر الحوتي | 180 | 171.78571428571428 | 129 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+149 | 16552 | خالد محمد فولي أبوبكر | 39.5 | 56 | 0 | 62 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+150 | 16558 | مرضية خليفة سليمان حسن | 180.06 | 181.25 | 120 | 75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+151 | 16559 | المنتصربالله محمود عبدالمنعم بكار | 118.5 | 183.64285714285717 | 72 | 76.86 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+152 | 16563 | نهى خليفة اكريم عبدالقادر | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+153 | 16585 | اسراء مختار مسعود حسن | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+154 | 16602 | هبة محمود شكري الدراجي | 134.5 | 180.25 | 102 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+155 | 16622 | فاطمة فيصل عاشور الورفلي | 244 | 97.21428571428572 | 36 | 75.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+156 | 16655 | نجلاء عمران بشير مفتاح | 0 | 79.5 | 0 | 0 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+157 | 16661 | تسنيم حمد محمود هويدي | 98 | 122.17857142857143 | 67 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+158 | 16666 | أحمد ياسين أحمد حماد الساعدي | 0 | 64 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+159 | 16675 | سجود جمعة يوسف القطعاني | 136 | 162.03571428571428 | 90 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+160 | 16687 | سهى سليم سعد عبدالجليل | 158.5 | 145.78571428571428 | 95 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+161 | 16697 | سالمة نوري محمود الفسي | 0 | 0 | 31 | 5.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+162 | 16732 | أيمن عبدالرازق محمد الشلوي | 0 | 146.96428571428572 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+163 | 16737 | محمد ايمن احمد شهاب | 0 | 0 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+164 | 16764 | يارا فرج عبدالله منصور | 221 | 102.57142857142858 | 68 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+165 | 16765 | سارة عبدالله محمود العبار | 217.78 | 197.5 | 128 | 95.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+166 | 16768 | نجلاء عبدالباسط يوسف محمد | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+167 | 16776 | هاجر ابوبكر فرج البكوش | 144 | 162.89285714285714 | 112 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+168 | 16803 | سلامة مصباح سلامة | 0 | 0 | 0 | 60.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+169 | 16805 | سندس جمال محمد البيرة | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+170 | 16819 | مودة مفتاح عبدالله | 123 | 149.46428571428572 | 85 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+171 | 16861 | كريمة عبدالرحمن محمد | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+172 | 16873 | حنان سالم عبدالله خليل | 181.5 | 203.35714285714286 | 121 | 81.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+173 | 16883 | حسن حمد حسن بوجولة | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+174 | 16908 | ايناس محمود علي محمد | 0 | 153.42857142857144 | 66 | 47.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+175 | 16915 | نور الهدى فرج ادريس | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+176 | 16951 | سماح علي حسن الاطرش | 0 | 182.75 | 0 | 76 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+177 | 17011 | فاطمة عبدالرازق مرعي العماري | 164.5 | 180 | 134 | 68.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+178 | 17023 | آية صابر عبدالغني سعيد | 0 | 43 | 0 | 0 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+179 | 17061 | محمد عبدالحميد محمد ماضي | 0 | 0 | 122 | 0 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+180 | 17065 | سامية فرج علي محمد | 0 | 77.92857142857143 | 0 | 69 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+181 | 17083 | نها ناصر عبدالله | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+182 | 17104 | رقية سليمان عبدالله محمد | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+183 | 17117 | نورالهدي محمد عبدالنبي عبدالله | 30.5 | 0 | 0 | 0 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+184 | 17132 | صفاء علي عبدالرحمن القذافي | 0 | 59 | 0 | 18 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+185 | 17158 | وفاء ميلاد سالم ميلاد | 185 | 188.39 | 120.25 | 61 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+186 | 17161 | سلوى عوض عبدالله الفيتوري | 180 | 182.82 | 123.45 | 67.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+187 | 17162 | وئام صقر إدريس صقر | 0 | 185.35 | 0 | 0 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+188 | 17178 | محمد عثمان حسن الجروشي | 180 | 127.46428571428572 | 122 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+189 | 17209 | مرام بن عيسى عبدالعاطي فرج | 180.5 | 170.85714285714286 | 124.2 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+190 | 17244 | احمد ايمن محمد شحادة | 182.1 | 199 | 95 | 64.42 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+191 | 17259 | روعة صلاح ناجي موسى | 0 | 55.5 | 0 | 12.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+192 | 17283 | عادل جمعة سعد حسين | 120.5 | 122.85714285714286 | 91 | 42 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+193 | 17293 | صفاء مصباح محمد المغربي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+194 | 17322 | سالمة جمال بالراس علي | 118 | 129.17857142857144 | 89 | 41 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+195 | 17327 | نجوى عبدالناصر علي | 200.5 | 180.21 | 121 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+196 | 17341 | سندس سالم حمد المغربي | 184.5 | 0 | 133.55 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+197 | 17352 | نورعبدالباسط سالم زوبي | 126.5 | 112.03571428571429 | 85 | 45.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+198 | 17366 | سندس أمعمر أحمد أنقريط | 0 | 160.17857142857144 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+199 | 17371 | مهند فرج عمر بن سعود | 54.5 | 0 | 63 | 0 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+200 | 17372 | عبدالله جمال عطية بوكمار | 192.5 | 180.39285714285717 | 123 | 63.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+201 | 17373 | ملاك كمال قسم السيد | 0 | 0 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+202 | 17396 | بشرى معمر أحمد بوشعالة | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+203 | 17414 | زينب فرج صالح موسى | 180 | 207.61 | 122 | 64.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+204 | 17432 | هناء عبدالله حسن رجب | 180 | 180.25 | 120 | 80 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+205 | 17479 | رهيبة مصطفى عيسى | 37.5 | 180.17857142857144 | 0 | 19.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+206 | 17481 | هدى صالح حمد محمود | 198.89 | 202.57 | 120 | 61.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+207 | 17490 | آية ونيس افكيرين بلال | 144 | 159.21428571428572 | 100 | 47.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+208 | 17495 | سندس عبد الله عمر العبيدي | 150 | 184.07 | 114 | 64.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+209 | 17498 | حنان فرج عثمان سالم | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+210 | 17520 | الحبيب مصطفى ناصر | 0 | 39 | 0 | 11.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+211 | 17542 | شعبان عبدالله شعبان محمد شعبان | 125 | 133.82142857142858 | 90 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+212 | 17547 | مروة حسين علي قرمان | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+213 | 17548 | إسراء يوسف محمد حماد | 214.06 | 219.5 | 117 | 87.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+214 | 17550 | إيمان محمد بلعيد سعد | 180 | 152.25 | 95 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+215 | 17557 | نبيلة التجاني محمدين علي | 157 | 180.25 | 123 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+216 | 17576 | عبدالرؤوف حلمي عبدالباري عون | 180 | 0 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+217 | 17604 | فاطمة عزالدين امحمد | 0 | 75.21428571428572 | 0 | 0 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+218 | 17634 | هالة محمد حمد صالح | 157.5 | 0 | 127 | 66.38 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+219 | 17640 | اسراء إبراهيم عيسى علي المعوج | 132.5 | 181.39 | 47 | 48.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+220 | 17643 | الاء عادل عبدالسلام حفالش | 207 | 213.21428571428572 | 130 | 76 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+221 | 17645 | اسراء صابر علي فرج الدرسي | 154 | 157.64285714285714 | 111 | 62.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+222 | 17649 | ابراهيم خالد ابراهيم صالح اقداره | 181.38 | 160.92857142857144 | 88 | 69.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+223 | 17654 | الهدار محمد الهدار الاصقع | 261.5 | 205.18 | 145.6 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+224 | 17655 | انسام فرج علي محمد | 154 | 167.60714285714286 | 121 | 70.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+225 | 17666 | اسماء فرج مفتاح فرج اعنيبه | 159.5 | 180 | 120 | 69.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+226 | 17680 | ايمان رجب بالقاسم المهدي | 169.5 | 180.17857142857144 | 120 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+227 | 17695 | مرام جمعة عبد الله انويجى | 158.5 | 185.07142857142856 | 123 | 65.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+228 | 17696 | إيمان عقوب بالقاسم عبدالنبي | 173 | 171.14285714285714 | 120 | 66.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+229 | 17697 | دانيا عبد السلام عبد الله السمين | 180 | 192.42857142857144 | 128 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+230 | 17704 | حسن احمد محمد عبدالحفيظ | 124.5 | 158.07142857142856 | 129.5 | 51 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+231 | 17709 | حواء نوري سالم محمد هيلان | 180.69 | 180.96 | 128 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+232 | 17717 | رتاج سالم سلطان الدرسي | 159.5 | 112 | 75 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+233 | 17719 | بشرى المحجوب رجب المحجوب | 142.5 | 146.39285714285714 | 88 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+234 | 17721 | رتاج منصور ابراهيم البشاري | 131 | 97.64285714285714 | 64 | 46.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+235 | 17748 | اسراء عبدالكريم عبدالمجيد العوامي | 0 | 112 | 87 | 27.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+236 | 17750 | حواء مفتاح محمد حمد الاروح | 180 | 180 | 148 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+237 | 17756 | ايه وسيم يحيي يوسف | 180.25 | 180.18 | 120 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+238 | 17764 | رتاج عبدالسلام مسعود  العمامي | 181.5 | 165.32142857142858 | 120 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+239 | 17779 | رهام عبدالرازق جمعه خليل | 0 | 58 | 0 | 21.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+240 | 17797 | سجى فتحي جمال ادريس | 127.5 | 139.5 | 77 | 45.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+241 | 17808 | سعده سعد أحمد بوعمود | 108.75 | 148.25 | 42 | 27.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+242 | 17832 | ساره فتحي حسن الدرناوي | 128.25 | 137.14285714285714 | 90 | 61.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+243 | 17833 | منيه محمد بركات على بركات | 185.5 | 190.35714285714286 | 150 | 78.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+244 | 17854 | ايه محمد محمد حمد | 135.5 | 130.5 | 89 | 41.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+245 | 17857 | محمد رجب عبدالجواد علي | 189.63 | 181.39 | 136 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+246 | 17859 | حمد ابراهيم حمد البطران | 162 | 180.5 | 111 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+247 | 17873 | رهف علي عتيق الهوني | 162.5 | 171.82142857142858 | 61 | 68.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+248 | 17878 | رهام محمود علي محمد | 194.75 | 221.46428571428572 | 139 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+249 | 17879 | زينة كمال محمد عثمان | 180 | 181.5 | 121 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+250 | 17889 | سارة جمعه محمد منصور | 138.5 | 166.82142857142858 | 107 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+251 | 17915 | فاطمه الزهراء احمد على الشحومي | 100 | 86.17857142857143 | 65 | 12.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+252 | 17937 | علي عبدالسلام عبدالله الساحلي | 153 | 206.14285714285717 | 108 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+253 | 17939 | ايناس صالح السنوسي صالح | 73.5 | 115.71428571428572 | 51 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+254 | 17950 | ريهام عادل سالم المهدي عثمان | 182.5 | 193.57 | 120 | 62.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+255 | 17951 | صفاء عبدالحميد بوبكر اسويكر | 168.25 | 187.60714285714286 | 122 | 65.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+256 | 17955 | فاطمة ابوبكر موسي كركي | 187.44 | 202.25 | 127 | 76.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+257 | 17960 | عهد عادل علي محمد ياسين | 140 | 166.07142857142858 | 87 | 46.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+258 | 17966 | آيه الصادق جمعه التارقي | 136 | 143.17857142857144 | 67 | 43 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+259 | 17970 | صباح عطية شحات عبدالله | 147.75 | 136.67857142857144 | 91 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+260 | 17980 | غدي جمعه محمد مخلوف | 56 | 121.32142857142858 | 30 | 18.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+261 | 17982 | منيه ناصر علي محمد المرغني | 180 | 195.71428571428572 | 120 | 60.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+262 | 17986 | عبدالسلام جماعة زيدان عبدالجليل | 76 | 123.64285714285714 | 0 | 31 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+263 | 17987 | الطويل احمد الطويل جلالة | 185.4 | 189.46428571428572 | 127.1 | 60.63 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+264 | 17989 | فاطمة موسى علي هارون | 0 | 153.57142857142858 | 0 | 33.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+265 | 17995 | هبه فوزي زايد مفتاح | 122 | 144.78571428571428 | 114 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+266 | 18014 | فاطمة عبدالسلام حسن أبوحميده | 186.4 | 180.46428571428572 | 124.8 | 69 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+267 | 18029 | تقوى سالم منصور | 110.5 | 98.89285714285714 | 132.23 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+268 | 18030 | إسراء عثمان حمد عثمان | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+269 | 18052 | ملاك أسامة علي سعيد | 153.75 | 181.14 | 108 | 61.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+270 | 18058 | صفاء رجب عوض الشيلابي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+271 | 18087 | جودية صالح عوض المغربي | 140 | 109.71428571428572 | 101 | 71 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+272 | 18097 | وفاء محمد عوض عبدالجليل | 134 | 158.67857142857144 | 101 | 48.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+273 | 18109 | أحمد عبدالعزيز إعبيد أبوبكر | 180 | 181.46 | 105 | 60.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+274 | 18121 | إزدهار يوسف عبدالحميد عبدالواحد | 182.8 | 162.96428571428572 | 131 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+275 | 18144 | عبدالمولى مصطفى عبدالمولى المنفي | 108 | 133.60714285714286 | 98 | 37.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+276 | 18191 | آية حسين عوض حسين | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+277 | 18217 | نورا عبدالفتاح محمود مفتاح | 39 | 112.53571428571428 | 0 | 43 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+278 | 18223 | فاطمة طاهر جبريل بوبكر | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+279 | 18229 | فاطمة حمد سالم الشيخي | 0 | 0 | 0 | 16 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+280 | 18232 | بشرى خالد يوسف بوزيد | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+281 | 18263 | ايمان الساعدي عبدالرحمن النيهوم | 185.9 | 191.04 | 120 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+282 | 18277 | ملاك محمود سليمان حمد | 180 | 130.64285714285714 | 120 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+283 | 18336 | رويدا محمد عبدالجواد البراني | 130.5 | 103.17857142857143 | 120 | 47 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+284 | 18338 | هنادي إمراجع عمر مصباح | 180 | 154.96428571428572 | 74 | 61.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+285 | 18363 | فاطمة محمد حسن مختار | 150 | 192.14285714285717 | 120.55 | 50.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+286 | 18364 | سندس فرج علي شهوب | 85.5 | 110.64285714285714 | 36 | 39 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+287 | 18387 | أحمد عبدالناصر علي الزواوي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+288 | 18404 | إيمان عبدالفتاح إدريس موسى | 89.75 | 198.60714285714286 | 71 | 60.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+289 | 18419 | محمد فتحي محمد عبدالحليم | 41 | 196.78571428571428 | 50 | 17 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+290 | 18439 | إيمان خليفة المهدي علي | 189.6 | 182.86 | 113 | 61.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+291 | 18466 | حنين سعيد يونس قويدر | 180 | 190 | 128 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+292 | 18476 | حنين جمال محمد عبدالسلام | 59.5 | 77.21428571428572 | 39 | 26.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+293 | 18492 | أماني الشريف عبدالواحد خليفة | 182.7 | 193.5 | 120 | 67.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+294 | 18494 | أسماء محمد صالح بازامة | 121 | 160.17857142857144 | 128.15 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+295 | 18510 | امحمد سالم عبالرسول المهدي | 139 | 199.79 | 91 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+296 | 18511 | خالد علي سالم أبوقفه | 191.35 | 0 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+297 | 18512 | سالم مفتاح سالم محمد | 0 | 0 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+298 | 18531 | فاطمة عبدالناصر مفتاح الشريف | 0 | 117.64285714285714 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+299 | 18536 | محمد فرج خليفة قواليش | 0 | 0 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+300 | 18542 | فاطمة شاكر منصور الفضيل | 0 | 0 | 0 | 12.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+301 | 18565 | هاجر بوبكر محمد علي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+302 | 18585 | رجاء مرعي بوبكر سعيد بورميله | 64.5 | 95.67857142857143 | 0 | 29 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+303 | 18614 | هبة حمد عوض عبدالسلام | 180 | 180.5 | 120 | 70.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+304 | 18631 | رتاج عبدالمولى مسعود عبدالمولى | 120.5 | 180 | 72 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+305 | 18638 | هديل علي عيسى بن صالح | 0 | 78.67857142857143 | 0 | 9.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+306 | 18641 | ندى محمود بدر جبريل | 0 | 187.68 | 0 | 60.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+307 | 18652 | مودة عبدالباسط محمد الدرسي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+308 | 18653 | صفي الدين سالم سليم السنوسي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+309 | 18672 | هبة السنوسي فرج العقيلي | 180 | 142.67857142857144 | 104 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+310 | 18676 | سلسبيل عمر حسين عبدالسلام | 0 | 0 | 0 | 61 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+311 | 18679 | حليمة جبريل المرتضي رجب | 0 | 166.35714285714286 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+312 | 18681 | مرام جمعة ناصر الاسكندراني | 67.5 | 68.64285714285714 | 54 | 38.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+313 | 18687 | جادالله عادل جادالله العلام | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+314 | 18692 | فاطمة عبدالسلام علي العماري | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+315 | 18694 | سراج فيصل عبدالله خماخم | 0 | 0 | 136 | 62.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+316 | 18724 | خولة خالد رجب عجاجة | 186 | 194.32 | 120.4 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+317 | 18736 | حواء أحمد محمد صالح | 180 | 182.75 | 110 | 61.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+318 | 18758 | ريحان فتحي فرج الحاسي | 126 | 201.25 | 96 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+319 | 18772 | هديل جمعة نصرعريبي | 0 | 0 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+320 | 18777 | نور أيمن السنوسي بوراوي | 84.25 | 180.42857142857144 | 64 | 47.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+321 | 18795 | وفاء عبدالله بشير المقصبي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+322 | 18805 | هند عادل عبدالكريم الغويل | 133 | 153.10714285714286 | 106 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+323 | 18812 | مرح محمد عبدالمنعم أعبيد | 93.5 | 85.64285714285714 | 64 | 35.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+324 | 18817 | أشواق أسامة شحات الجوهري | 81 | 125.89285714285714 | 68 | 14.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+325 | 18830 | هبة سالم محمد قرباج | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+326 | 18838 | أينور عاطف سامي حسني | 114 | 162.25 | 86 | 43.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+327 | 18848 | نورة عبدالكريم إبراهيم جابر | 186.25 | 198.86 | 130 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+328 | 18850 | أحمد محمد عبدالكريم حسن | 189.5 | 180 | 121.6 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+329 | 18858 | أحمد كوري علي أحمد | 180 | 157.67857142857144 | 110 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+330 | 18865 | زينب علي إبراهيم عبد ربه | 134.5 | 151.85714285714286 | 114 | 60.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+331 | 18867 | رنا محمد أحمد محمد | 0 | 102.85714285714286 | 0 | 40.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+332 | 18869 | دعاء فتحي حمد الشركسي | 106.75 | 112.21428571428572 | 83 | 49.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+333 | 18870 | عبدالرحمن فرج عبدالرحمن عبدالهادي | 180.25 | 190.85714285714286 | 105 | 60.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+334 | 18876 | ريما عبدالله علي القذافي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+335 | 18891 | أميرة أحمد خليل زهدي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+336 | 18899 | ندى غسان زكي سلايمة | 85 | 186.65 | 74 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+337 | 18928 | آية صلاح أحمد المهشهش | 0 | 52 | 0 | 0 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+338 | 18937 | محمد سالم بن حمد ابوبكر التاجوري | 180 | 185.46 | 91 | 67.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+339 | 18954 | عائشة مفتاح عبد الواحد العرفي | 0 | 55.35714285714286 | 0 | 20.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+340 | 18963 | صلاح الدين مروان صلاح عبدالسلام | 198.1 | 186.35 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+341 | 18976 | عبدالرؤوف أحمد خليفة | 171 | 172.78571428571428 | 121.2 | 67.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+342 | 18979 | شرف الدين طاهر خليفة خليفة | 190.25 | 180.32142857142858 | 121.85 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+343 | 18984 | فاطمة فتحي مصطفى الغويل | 0 | 73.14285714285714 | 0 | 0 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+344 | 18985 | آمنة محمد صابر غلام القادر | 124.25 | 144.78571428571428 | 97 | 49.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+345 | 18995 | أم الخير عوض مفتاح العمامي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+346 | 19005 | مبروكة حمد محمد القعود | 224.3 | 214.07142857142858 | 115 | 65.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+347 | 19033 | بدر عبدالرازق بدر علي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+348 | 19035 | هاجر عبدالمنعم محمد الغول | 103 | 123.92857142857143 | 84 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+349 | 19041 | اصالة نصر فرج صداقة | 120 | 157.14285714285714 | 97 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+350 | 19049 | جبير الناجي موسي الحاسي | 128 | 180.5 | 106 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+351 | 19053 | انس حامد فرج سعيد | 217.5 | 218.14 | 165 | 80.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+352 | 19055 | رتاج مرعي سالم الفرجاني | 109 | 164.39285714285717 | 72 | 41.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+353 | 19070 | تقوى مفتاح سعد سليمان الميار | 163.5 | 161.25 | 97 | 28 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+354 | 19090 | مودة فرج ونيس الامير | 168.5 | 182.17857142857144 | 129 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+355 | 19119 | ابراهيم ناجي حسن علي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+356 | 19121 | عائشه محمد عبدالسلام الاثرم | 158.25 | 207.71428571428572 | 108 | 62.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+357 | 19127 | هديل خالد عبدالله صالح عبد العالي | 121 | 162.85714285714286 | 92 | 48.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+358 | 19152 | مودة محمد على هلاش | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+359 | 19153 | شهد عزالدين محمد سليمان | 119.5 | 183.42857142857144 | 107 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+360 | 19158 | فاطمة اسامة يونس سالم شعبان | 164.5 | 180.18 | 129 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+361 | 19163 | مروه سعد سليمان الفيتوري | 108.5 | 141.71428571428572 | 86 | 28.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+362 | 19167 | حنين احمد سعد ادم | 180 | 191.89285714285717 | 133 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+363 | 19182 | ايناس ايمن عبدالله حامد شلغوم | 180 | 205.46428571428572 | 111 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+364 | 19196 | ربيان وليد بوبكر عوض الخرم | 180 | 150.82142857142858 | 130.69 | 41 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+365 | 19203 | سارة مفتاح احمد البانكه | 140.5 | 165.17857142857144 | 132.32 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+366 | 19205 | اية احمد محمد محمد | 115.5 | 134.21428571428572 | 83 | 40 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+367 | 19206 | انس طارق الطاهر خليفة حسين | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+368 | 19216 | انية حسان سالم حسن الزعيتر | 121 | 134.21428571428572 | 73 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+369 | 19229 | سراج الدين سالم احمد سالم | 111.5 | 86.57142857142857 | 53 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+370 | 19231 | عبدالرحمن مراد ابراهيم بوزريبه | 132 | 115.78571428571429 | 87 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+371 | 19238 | هنادي خليفة صالح عبدالسلام | 114.5 | 158.28571428571428 | 92 | 46 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+372 | 19242 | ابراهيم محمد ابراهيم معيوف | 209.4 | 207.5 | 141 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+373 | 19251 | اسراء يونس عبدالسلام الجحاوي | 167.5 | 159.57142857142858 | 120 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+374 | 19269 | فرج عبدالسلام فرج المرغني | 185.25 | 180 | 113 | 49.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+375 | 19277 | شذى عبدالله حمد الشافعي | 130.25 | 161.03571428571428 | 111 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+376 | 19305 | بدر اسماعيل جابالله جبريل | 184.55 | 180.32 | 124 | 65.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+377 | 19317 | اية مهشهش محمد محمود | 0 | 184.5 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+378 | 19321 | زينب احمد محمد عجيبة | 187.25 | 184.25 | 128 | 68.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+379 | 19325 | ريم ثابت ابراهيم العبيدي | 143 | 200.82142857142858 | 121 | 64.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+380 | 19335 | اية وليد احمد ابوجمعه | 165.5 | 181.10714285714286 | 127 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+381 | 19340 | حميدة يوسف عبدالله محمد | 161.25 | 191.5 | 120 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+382 | 19343 | اسراء فرج رجب فرج | 187.5 | 180.11 | 121.1 | 69.38 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+383 | 19344 | ريتاج مهدي فتحي محمد محجوب | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+384 | 19347 | مصعب عبدالنبي عبدالسلام خالد | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+385 | 19351 | سندس فرج علي الاسمر | 157.5 | 209.85714285714286 | 90 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+386 | 19362 | رتاج عبدالسلام علي عبد السلام | 129.5 | 209.25 | 104 | 79.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+387 | 19367 | الاء احمد السنوسي البشاري | 138.5 | 187.17857142857144 | 84 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+388 | 19372 | سعاد صالح محمود مسعود | 0 | 95.5 | 0 | 0 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+389 | 19380 | صفاء عياد عبدالعزيز صالح | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+390 | 19383 | رتاج مفتاح سعد الميار | 196 | 200.28571428571428 | 111 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+391 | 19385 | ساجدة فرج جبريل سعد | 0 | 61 | 0 | 14 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+392 | 19387 | منية عوض حسن السعيطي | 153 | 180.32142857142856 | 100 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+393 | 19391 | زينب لانو سوقى على | 123.5 | 166.53571428571428 | 90 | 68.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+394 | 19397 | زينب مفتاح يوسف امشختر | 146.75 | 166.64285714285714 | 121.5 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+395 | 19405 | بهاءالدين عبدالباسط صالح الطبولي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+396 | 19412 | فاطمة احمد المبروك عبدالرحيم | 180 | 180.36 | 130 | 61.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+397 | 19418 | سلوى هارون سلطان ابوبكر | 87 | 88 | 73 | 42.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+398 | 19421 | اسراء حمد محمد عبدالله | 183 | 185.39285714285717 | 120 | 70 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+399 | 19426 | عائشة احمد فرج حسين | 0 | 51.785714285714285 | 0 | 0 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+400 | 19440 | شيماء حسن عمر على المهدوي | 134 | 158.67857142857144 | 110 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+401 | 19448 | عادل حسين علي امنينه | 182.1 | 180 | 124 | 69 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+402 | 19455 | كثلوم شحات خليل عبدالجواد محمد | 126 | 133.60714285714286 | 97 | 47 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+403 | 19461 | شفاء خالد رمضان حسن المنفي | 128.25 | 134.96428571428572 | 68 | 43.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+404 | 19479 | طلال خالد محمد عبدالكريم | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+405 | 19505 | أمنة خالد عمران مختار | 139.5 | 130.39285714285714 | 84 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+406 | 19553 | نادية الحسين علي جبريل السعيطي | 180 | 181.35714285714286 | 128 | 61.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+407 | 19558 | انتصار مفتاح احسين اغليلبيب | 31 | 147.42857142857144 | 0 | 65.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+408 | 19567 | هنادي مفتاح على السليني | 180 | 0 | 122.7 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+409 | 19572 | هيثم نوح فرج عبدالعالى | 77.5 | 163.39285714285714 | 63 | 51.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+410 | 19573 | نجاح محمد عبدالسلام عطايا | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+411 | 19580 | سالمة احمد على امراجع | 0 | 130.46428571428572 | 0 | 46 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+412 | 19584 | نسرين عبداللطيف فرج الصالحين | 180 | 190.46428571428572 | 125.4 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+413 | 19591 | هاجر حسين امقاوي ادريس | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+414 | 19600 | جود خيرى حسين محمد كبلان | 130.5 | 0 | 58 | 44 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+415 | 19609 | صالحه عيس عقليه ادم | 67.25 | 210.85714285714286 | 84 | 69.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+416 | 19619 | بثينه رجب ربيع ادويوة | 158 | 183.5 | 120 | 62.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+417 | 19623 | فاطمة فرج عبدالحفيظ صالح ابوقبول | 133.5 | 180.82142857142858 | 84 | 39.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+418 | 19626 | مريم عيسى عبدالله ابوعواد | 195.4 | 159.64285714285714 | 112 | 40 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+419 | 19649 | مروة عمر احميد الطبولي | 180 | 156.67857142857144 | 120 | 66.63 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+420 | 19659 | ميسون جمال مسعود ابوالسعود | 160.5 | 183.75 | 97 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+421 | 19668 | محمد مجيد حسين بوشيبه | 225.13 | 222.75 | 138 | 65.38 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+422 | 19669 | الاء توفيق احمد البركى | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+423 | 19691 | امل عمر ونيس مرعي | 114.5 | 130.25 | 0 | 27.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+424 | 19693 | جمانة فخري فتح الله عبدربه | 180 | 194.36 | 120 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+425 | 19700 | اسامه بوبكر عوض صالح | 74.5 | 62.142857142857146 | 41 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+426 | 19718 | شيماء محمد فضل محمد فضل الله | 197.3 | 194.25 | 142 | 62.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+427 | 19727 | محمد وليد فوزي الغناي | 0 | 33 | 0 | 0 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+428 | 19730 | زينب مسعود عبدالله عيسي | 0 | 164 | 0 | 0 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+429 | 19733 | محمد نصرى محمد قدرى | 59 | 117.35714285714286 | 76 | 32 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+430 | 19740 | مالك ابراهيم جبريل مصطفي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+431 | 19753 | عائشه رافع حماد محمد | 189 | 198.75 | 132 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+432 | 19775 | مجدي محمد رمضان النايض | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+433 | 19776 | فاطمة احمد محمد حمد | 180 | 190.96428571428572 | 98 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+434 | 19783 | فرح حمد محمد عبدالسلام | 204.2 | 189.46 | 140 | 67 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+435 | 19793 | فاطمة مفتاح ادريس محمد | 0 | 102.92857142857143 | 26 | 26.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+436 | 19794 | موده عبد الله منصور الدرسى | 180 | 165 | 121 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+437 | 19798 | هديل عبدربه موسى الفرجاني | 180 | 184.32142857142858 | 122.3 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+438 | 19803 | خديجه موسى مصطفى محمد | 158.5 | 182.5 | 122 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+439 | 19817 | نورالهدى مجدي علي مصطفى | 147.5 | 117 | 94 | 60.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+440 | 19819 | يمنى لملوم محمد علي لملوم | 190.88 | 187.75 | 136 | 77.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+441 | 19826 | وعد مجدى مجيد عبدالله | 157 | 202.85714285714286 | 120 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+442 | 19828 | ابراهيم جمال محمود حلمى | 0 | 141.89285714285714 | 89 | 15.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+443 | 19838 | محمد جلال محمد ادم | 0 | 102.82142857142857 | 46 | 18.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+444 | 19840 | مريم اخويطر عبد الحميد عبد المجيد | 104.5 | 133.53571428571428 | 77 | 40.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+445 | 19841 | صالح عمر موسى التكو | 0 | 80.75 | 0 | 13.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+446 | 19843 | احمد خالد عطية محمد | 189.3 | 171.32142857142858 | 121 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+447 | 19845 | حواء امهيدي محمد الشيباني | 61 | 167.14285714285717 | 103 | 30.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+448 | 19847 | هاله جمعه عاشور محمد اجريبيع | 188 | 201.03571428571428 | 120 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+449 | 19850 | هدى يوسف إبراهيم الشكماك | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+450 | 19854 | ايمان مفتاح مصباح علي | 107.5 | 144.85714285714286 | 62 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+451 | 19868 | عمار ياسر عبدالله الاحمد | 189.9 | 183.5 | 124 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+452 | 19870 | نمارق محمد بالقاسم علي | 166 | 191.25 | 109 | 71.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+453 | 19871 | ملاك منصور ساسي الترهوني | 141.5 | 168.14285714285714 | 79 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+454 | 19873 | محمد حسين غيث يونس حويل | 180 | 180.64 | 121 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+455 | 19878 | على بوبكر حسن البريشى | 193.63 | 202.17857142857144 | 19 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+456 | 19886 | شذى نبيل الرفاعي خليفة | 149.5 | 180.03571428571428 | 92 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+457 | 19906 | رويدا فرج سعد محمد | 116 | 126.67857142857143 | 81 | 35.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+458 | 19913 | نعيمة جمعة عمر عمر | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+459 | 19914 | وجدان حامد علي حامد | 146.5 | 166.35714285714286 | 85 | 41.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+460 | 19919 | مبروكة جمال يوسف سعيد السعيطي | 164 | 180.21 | 120 | 62.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+461 | 19923 | هبة الامين عمر الرياني | 115.5 | 91.53571428571429 | 50 | 44.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+462 | 19927 | نجمة ناجي سليمان الفضيل | 185.5 | 232.25 | 128 | 70.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+463 | 19931 | سجى سعد علي بشير | 180 | 228.25 | 120 | 65.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+464 | 19932 | زينب محمد أحمد زوبي | 136.5 | 141.92857142857144 | 81 | 49 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+465 | 19936 | الاء محمد بهاء الدين راجي المغربي | 124 | 172.92857142857144 | 107 | 71.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+466 | 19943 | سمية طارق السيد عبدالوهاب | 133.5 | 170.10714285714286 | 94 | 47.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+467 | 19951 | محمد أحمد حسين حفالش الفارسي | 145.5 | 152.71428571428572 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+468 | 19956 | هاجر حسين عمر الفلاح | 180 | 185.75 | 122 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+469 | 19962 | سالمة صالح محمد سالم | 0 | 100.82142857142857 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+470 | 19964 | فائزة محمد عبدالسلام سالم | 113 | 140.10714285714286 | 83 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+471 | 19966 | غالية مسعود جبر مسعود المغبوب | 184.13 | 226.03571428571428 | 121 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+472 | 19972 | البتول نوري حسن المضوي | 190 | 195.5 | 132.34 | 66.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+473 | 19979 | ندى علي مسعود علي مسعود | 174 | 187.25 | 110 | 67.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+474 | 19982 | رتاج علي عمار الهادي | 183 | 194.04 | 121.2 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+475 | 19986 | عبدالمالك مفتاح بوقفة العبار | 189.4 | 208.11 | 99 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+476 | 19992 | بسمة حمد عبدالرحيم عبدالسلام | 206.4 | 185.43 | 131.6 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+477 | 19999 | علي جمعة عبدالقادر علي | 160 | 180.96428571428572 | 121 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+478 | 20002 | بسمة بشير إبراهيم | 181 | 216.71428571428572 | 123 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+479 | 20007 | الصديق محمد الصديق بن شتوان | 190.25 | 215.14285714285714 | 137 | 75.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+480 | 20013 | سجى خالد بشير الميطونى | 189 | 184.5 | 123 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+481 | 20015 | مرام عبدالحفيظ موسى المهشهش | 181.63 | 215.89285714285717 | 124 | 66 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+482 | 20016 | عائشة عبدربه إبراهيم حمد | 151 | 197.53571428571428 | 105 | 71.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+483 | 20023 | منار خميس محمد سالم | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+484 | 20027 | نور الهدى عبداللطيف ادريس قدور | 166 | 168.96428571428572 | 111 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+485 | 20028 | إيمان محمد علي الزوي | 0 | 181.46428571428572 | 0 | 21.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+486 | 20030 | رائف خالد منصور محمد | 167 | 192.25 | 124 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+487 | 20034 | هنية النعاس حمد عيسى | 160 | 180.53571428571428 | 108 | 70.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+488 | 20035 | حورية  على مفتاح محمد | 112 | 148.39285714285714 | 69 | 50.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+489 | 20047 | الزهراء محمد امحمد قندي | 166.5 | 208.39285714285717 | 108 | 66.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+490 | 20048 | صفاء ادريس محمد المسلاتي | 173 | 226.67857142857144 | 99 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+491 | 20053 | صفاء عبدالكريم محمد محمد | 127 | 156.21428571428572 | 120 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+492 | 20058 | أرجوان فتحي بالقاسم العريبي | 215.5 | 204.25 | 138 | 69.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+493 | 20062 | علي عبدالله محمد صلاح | 0 | 5.75 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+494 | 20066 | تقوى جمال سالم العشيبي | 207.25 | 192.75 | 124 | 60.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+495 | 20070 | هبه محمد سعيد علي | 214.13 | 200.92857142857144 | 153 | 69.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+496 | 20076 | عائشة جمال الدين علي سعد بن الحاج | 161.75 | 221.35714285714286 | 94 | 46.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+497 | 20078 | صفاء موسى عبدالكريم الشكري | 195.5 | 209.35714285714286 | 131 | 61.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+498 | 20082 | آماني نوري محمد اسويل | 195.25 | 182 | 136 | 87 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+499 | 20091 | آلاء محمد مسعود خير | 153.25 | 180 | 111 | 68.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+500 | 20097 | منصور عمر سالم محمد | 181.25 | 203 | 120 | 65.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+501 | 20098 | فاطمة محمد موسى بن إسماعيل | 221.63 | 226.75 | 144 | 78.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+502 | 20102 | عمر محمد عمر إسماعيل | 189.63 | 183.5 | 136 | 75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+503 | 20103 | طه أحمد محمد أبوعبود | 125 | 151.35714285714286 | 110 | 38.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+504 | 20105 | آية الهمالي ونيس الهمالي | 211.88 | 220.75 | 153 | 86 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+505 | 20106 | عائشة عمر أحمد محمد | 188.88 | 194.5 | 101 | 62.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+506 | 20110 | نجيب أحمد نجيب الغرياني | 210 | 182.25 | 126 | 77.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+507 | 20112 | حنان عبدالمنعم قاسم | 197 | 192.35714285714286 | 129 | 69.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+508 | 20115 | آية رضا مصطفى عبدالله | 167.25 | 180.21428571428572 | 121 | 60.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+509 | 20117 | مريم طارق السيد الفقيه | 180.25 | 189 | 136 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+510 | 20118 | هاجر الصيد صالح الصادق | 143.5 | 164.42857142857144 | 96 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+511 | 20129 | ريان خالد هلال محمود | 193.5 | 232.57142857142858 | 138 | 61 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+512 | 20130 | إبراهيم صالح عيسى الحسوني | 184.5 | 189.32142857142858 | 120 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+513 | 20131 | محمد عبدالغني عبدالرحيم العوامي | 166 | 185.78571428571428 | 120 | 70.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+514 | 20133 | رتاج توفيق محمد علي | 180 | 180 | 120 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+515 | 20136 | هبه حمد فرج علي | 201.63 | 180.5 | 127 | 85 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+516 | 20139 | حواء مجيد عبدالسلام الأخضر | 163 | 187.35714285714286 | 121 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+517 | 20142 | إسراء عادل عمر أبوبكر | 193 | 214.5 | 120 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+518 | 20146 | غيداء عزالدين عيسى حسين | 146.5 | 185.21428571428572 | 103 | 62.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+519 | 20147 | عمر مصطفى إبراهيم عيسى | 226.13 | 185 | 121 | 75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+520 | 20151 | مروه اشتيوي سالم عماره | 203.75 | 226.64285714285717 | 143 | 76.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+521 | 20155 | عبدالواحد ناجي بوبكر عطيه | 190.25 | 211.10714285714286 | 120 | 61.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+522 | 20160 | محمد سليمان جبريل محمود | 198 | 222.96428571428572 | 120 | 80.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+523 | 20162 | جميلة عبدالحفيظ صالح البدري | 182.25 | 185.75 | 153 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+524 | 20168 | مريم عثمان رمضان أكويري | 190.38 | 210.75 | 133 | 70.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+525 | 20169 | ولاء بالعيد خلليفة أكريم | 180.25 | 206.39285714285717 | 138 | 62.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+526 | 20170 | أروي المبروك الشريف أبوزيد | 183.38 | 155.67857142857144 | 132 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+527 | 20172 | عبدالمهيمن علي عبدالله الشيخي | 182 | 180.35714285714286 | 112 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+528 | 20173 | زينب عامر صالح إبراهيم | 159 | 199.5 | 125 | 75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+529 | 20175 | نصرالدين محمود مخزوم الفرجاني | 41.5 | 53 | 0 | 21.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+530 | 20176 | إيناس أشرف محمد الورفلي | 180.75 | 195.75 | 129 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+531 | 20177 | رتاج عثمان الفيتوري علي | 180 | 182.53571428571428 | 96 | 69 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+532 | 20178 | زياد أحمد مفتاح محمد | 206 | 213.25 | 120 | 85 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+533 | 20182 | هديل محمد عبد الرحمن الشكماك | 173.5 | 195.67857142857144 | 120 | 75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+534 | 20191 | محمد خالد محمد فكرون | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+535 | 20193 | أمنه توفيق عمر طاهر | 147 | 191.35714285714286 | 122 | 70.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+536 | 20195 | سالمه نوري العربي الزاوي | 149 | 132.28571428571428 | 87 | 51.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+537 | 20196 | شروق عبدالتواب حسن مفتاح | 161.5 | 187.17857142857144 | 104 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+538 | 20198 | أروي خليفة علي عبدالله | 189.5 | 199.75 | 120 | 67.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+539 | 20204 | اميرة محمد علي سالم | 190.5 | 189.75 | 120 | 69.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+540 | 20206 | ملاك شعبان رجب الهدمي | 161.75 | 159.42857142857144 | 127 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+541 | 20207 | ندي موسي عبدالكريم الشكري | 181.25 | 217.57142857142858 | 138 | 63.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+542 | 20209 | يسري إبراهيم منصور بن لطيف | 145.25 | 190.75 | 120 | 66.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+543 | 20211 | سجي رافع محمد الدباح | 212.25 | 194.75 | 126 | 66.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+544 | 20212 | روعة ناصر عمر سليمان | 133 | 147.42857142857144 | 125 | 65.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+545 | 20214 | يقين ادريس رمضان حيفان | 123.5 | 163.28571428571428 | 84 | 48 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+546 | 20218 | عائشة عبدالجليل عمر محمد | 201.88 | 186.25 | 124 | 80 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+547 | 20228 | ساجدة حمد الزواوي حمد | 186 | 180 | 120 | 75.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+548 | 20229 | فاطمة بوبكر ابريك العجيلي | 185.5 | 189.46428571428572 | 122 | 75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+549 | 20230 | ايمان إبراهيم سليمان علي | 190 | 180 | 136 | 66 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+550 | 20233 | عبدالحكم أحمد بشير القرطبي | 191 | 207.25 | 135 | 65.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+551 | 20234 | ملاك امبارك عبدالسلام علي | 125 | 86.32142857142857 | 60 | 48 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+552 | 20236 | ثريا حسين حسن حمو | 199.5 | 190.25 | 136 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+553 | 20237 | وائل بدري سيد موسي | 45.5 | 157.92857142857144 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+554 | 20238 | بسمله أمجد ياسين عبدالقادر | 183 | 216.60714285714286 | 139 | 65.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+555 | 20242 | محمد سمير محمد عتريس | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+556 | 20243 | مؤيد مرعي ناجي ميلاد | 164.5 | 180.10714285714286 | 120 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+557 | 20245 | خالد محمد جلول الطرابلسي | 190.88 | 211.07142857142858 | 127 | 75.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+558 | 20249 | حسن ناجح ابوبكر عبدالمجيد | 92 | 119.10714285714286 | 74 | 45.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+559 | 20250 | ياسمين احمد محمد خليل | 159.5 | 180.42857142857144 | 132 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+560 | 20255 | الاء احمد عبدالرازق الحاسي | 210.63 | 184.75 | 120 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+561 | 20256 | شيماء مرعي محمد جابر | 180.13 | 185.53571428571428 | 125 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+562 | 20257 | وعد عقيلة عبدالرحمن الشكماك | 165.5 | 170.10714285714286 | 135 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+563 | 20260 | غادة ناجي علي العمامي | 136.5 | 166.10714285714286 | 104 | 70.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+564 | 20265 | مروه سالم أحمد بنور | 192.75 | 181.5 | 138 | 66.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+565 | 20267 | شهد مراجع عوض رشوان | 146.25 | 146.89285714285714 | 95 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+566 | 20268 | فضل الله عبدالله عمر القداري | 163.75 | 181 | 139 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+567 | 20270 | سارة مرعي الدوكالي علي | 162.25 | 191.82142857142856 | 123 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+568 | 20271 | أرجوان محفوظ مصطفي محمد | 127 | 181.39285714285717 | 116 | 60.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+569 | 20274 | سلسبيل سالم مصطفي الوداني | 181.5 | 202.32142857142858 | 146 | 69.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+570 | 20278 | اماني عبدالسلام علي حمد | 184.5 | 196 | 122 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+571 | 20279 | الحسن فتحي محمد ادريس | 198.25 | 185 | 122 | 69.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+572 | 20280 | عبدالله بالقاسم عطيه الطيب | 198.25 | 180 | 128 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+573 | 20282 | عبدالرحمن علي خليفة بالقاسم | 183.88 | 218.21428571428572 | 164 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+574 | 20284 | أيوب محمد سليمان عبدالله | 189.25 | 205 | 125 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+575 | 20287 | اية احمد رشيد صبح | 192.38 | 203.39285714285714 | 140 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+576 | 20288 | المعتصم بالله محمد عبدالنبي عمر | 120.5 | 157.71428571428572 | 100 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+577 | 20295 | فاطمة كمال جمعه الدرناوي | 147 | 161.57142857142858 | 125 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+578 | 20297 | موده بوبكر مفتاح الدينالي | 190.25 | 182.46428571428572 | 111 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+579 | 20298 | روعة حسام صلاح محمد | 212.75 | 191.28571428571428 | 141 | 72.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+580 | 20300 | رشا الصالحين محمد فضيل | 204.5 | 208.25 | 121 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+581 | 20307 | هاجر عيسي هدية محمد | 129.5 | 128.85714285714286 | 95 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+582 | 20310 | فاطمة الزهراء محمد عبدالكريم قرقوم | 193.5 | 206.32142857142858 | 154 | 85 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+583 | 20316 | رتاج محمد سالم اجفيلة | 71.5 | 0 | 62 | 34 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+584 | 20325 | عبداللطيف يحي محارب العرفي | 180 | 191.75 | 132 | 65.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+585 | 20328 | هنيدة منعم ميلاد التاجوري | 167.5 | 166.42857142857144 | 120 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+586 | 20332 | ندي مجدي محمد عمران | 185 | 193.32142857142856 | 130 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+587 | 20334 | فاطمة رجب عبدالسلام الزاوي | 154 | 170.85714285714286 | 106 | 51.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+588 | 20335 | محجوبة فوزي سالم العماري | 182.5 | 180.75 | 120 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+589 | 20345 | رهف خالد جمعه الشكري | 109 | 140.53571428571428 | 82 | 37.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+590 | 20346 | عزيزه صالح عبدالرازق الوريدي | 145 | 158.42857142857144 | 98 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+591 | 20350 | رتاج المهدي حسين بوحليقة | 173 | 148.71428571428572 | 112 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+592 | 20352 | ذكري محمد عبدالكريم الزادمة | 114.5 | 188.92857142857144 | 123 | 72.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+593 | 20354 | تقوي عمر محمد زناد | 188.5 | 200.07142857142858 | 126 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+594 | 20358 | نجوان محمد ميلاد الشويهدي | 158 | 213 | 91 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+595 | 20359 | رحمة عادل سعد الزلاوي | 171.5 | 211.35714285714286 | 130 | 69 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+596 | 20360 | أسماء محمد مسعود مكائيل | 157 | 195.03571428571428 | 120 | 61 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+597 | 20361 | عائشة عثمان عبدالقادر شمسه | 157.75 | 192.96428571428572 | 120 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+598 | 20362 | أية جمعة عبدالقادر علي | 186.25 | 222.39285714285717 | 107 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+599 | 20367 | سندس محمد علي فائد | 186.13 | 183.96428571428572 | 156 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+600 | 20374 | هدي علي صالح مؤمن | 115 | 200.78571428571428 | 93 | 60.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+601 | 20375 | رضاء السنوسي عبدالله ابوزيد | 197.63 | 212.78571428571428 | 120 | 61.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+602 | 20386 | شيماء فتحي فرج عبدالقوي | 124 | 202.14285714285717 | 89 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+603 | 20388 | زينب إبراهيم مختار الأجحل | 168.5 | 190 | 120 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+604 | 20389 | المقداد جمال محمد ادريس | 169.75 | 161.53571428571428 | 86 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+605 | 20390 | عبدالعزيز سعد ذاوود فرج | 175 | 194.28571428571428 | 106 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+606 | 20391 | طاهر فخري طاهر عبدالقادر | 148.5 | 121.35714285714286 | 66 | 41.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+607 | 20393 | حسن علي حسن يونس | 182.63 | 213.92857142857144 | 120 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+608 | 20396 | سجي سالم زيدان صالح | 194.13 | 185.75 | 136 | 79.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+609 | 20402 | سعيد عبدالرحمن سعيد المبروك | 158.25 | 181.07142857142858 | 120 | 61.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+610 | 20408 | فاطمة علي محمد المغربي | 180 | 194.35714285714286 | 113 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+611 | 20423 | تسنيم محمد عبدالعزيز الورفلي | 140.5 | 198.10714285714286 | 111 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+612 | 20434 | حمزه فرج احميد الفرجاني | 183.75 | 190.92857142857144 | 123 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+613 | 20437 | تقوي محمد علي مبارك | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+614 | 20442 | اسيا يونس علي اسعيد | 180.13 | 182.75 | 121 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+615 | 20444 | ايه محمود عبدالسلام هاشم طباس | 170.5 | 205.03571428571428 | 121 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+616 | 20445 | عبدالهادي خالدعبدالهادي امراجع | 195 | 193.25 | 149 | 79.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+617 | 20447 | تسنيم خالد سعيد عبدالرحمن | 132.5 | 132.89285714285714 | 93 | 29.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+618 | 20451 | عبدالحميد عبدالله احمد اصميدة | 142.5 | 147.85714285714286 | 94 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+619 | 20457 | هنادي فتحي فضيل علي | 182.63 | 211.78571428571428 | 138 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+620 | 20481 | طارق العيد مسعودي | 192 | 180.25 | 150 | 69 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+621 | 20488 | محمد عبدالله عمر اكواس | 191.5 | 180.25 | 137 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+622 | 20496 | خديجة عمر مفتاح عبيد | 157.5 | 168.39285714285714 | 98 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+623 | 20497 | أروي عبدالكريم جادالله محمد | 186.25 | 232.85714285714286 | 120 | 75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+624 | 20498 | عبدالمالك فرج غيث الجروشي | 200.5 | 181.07142857142858 | 123 | 75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+625 | 20499 | هاجر صلاح السنوسي الورفلي | 202 | 200.53571428571428 | 133 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+626 | 20515 | مروة ادريس عبدالحميد السنوسي | 127 | 121.64285714285714 | 72 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+627 | 20522 | محمد احمد سليمان ادم | 145 | 148.96428571428572 | 94 | 45.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+628 | 20525 | عبدالله عبدالحفيظ عبدالكريم عبدالسلام | 141.25 | 140.35714285714286 | 90 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+629 | 20529 | سراج علي عبدالحفيظ بن حليم | 0 | 118.32142857142858 | 0 | 34.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+630 | 20530 | إسلام محمد علي ابوقمر | 173 | 203.60714285714286 | 124 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+631 | 20542 | هديل عبدالسلام فرج حانة | 174.5 | 224.10714285714286 | 124 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+632 | 20547 | مبروكة خليفة ابوبكر عبدالمولي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+633 | 20548 | رتاج عاصم محمد بالقاسم | 182 | 214.64285714285717 | 133 | 65.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+634 | 20552 | هديل رمضان محمد رافع | 156.25 | 214.10714285714286 | 62 | 69.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+635 | 20560 | عبدالرحمن عبدالواحد عطية ابراهيم | 180 | 198.92857142857144 | 120 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+636 | 20561 | طارق عبدالعزيز عمر القداري | 141.5 | 160.96428571428572 | 89 | 66.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+637 | 20569 | وردة عبدالحفيظ عبدالجليل ميلاد | 202.5 | 212.14285714285717 | 120 | 65.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+638 | 20571 | سندس صلاح الدين محمد ادريس بوقطمة | 195.75 | 180 | 124 | 69.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+639 | 20588 | محمد الصادق محمد حيدر | 203.44 | 192.25 | 131 | 85 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+640 | 20592 | زكريا سعد سالم سعد | 165 | 194.39285714285717 | 102 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+641 | 20596 | المعتصم بالله مصباح القذافي العرفي | 185.75 | 172.60714285714286 | 113 | 51.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+642 | 20600 | وسن سليمان سعد البراني | 145 | 157.53571428571428 | 111 | 49 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+643 | 20602 | عماد الدين مرعي عبدربه البركي | 0 | 218.25 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+644 | 20604 | سارة أحمد محمد مازق | 51.5 | 48 | 0 | 0 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+645 | 20617 | رنا سليمان ادم يونس | 194.5 | 180.85714285714286 | 121 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+646 | 20654 | مسعود حسن مسعود حسن | 45 | 146.28571428571428 | 0 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+647 | 20655 | عبدالكريم يونس عبدالكريم علي | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+648 | 20660 | جيهان عبدالسلام شعبان بن سعود | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+649 | 20664 | محمد علي الخضر العلي | 225.13 | 232.75 | 159 | 78.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+650 | 20699 | عبدالمهيمن اسامة مفتاح النعاس | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+651 | 21118 | اية سالم بوعجيلة علي | 191 | 180 | 122 | 68.55 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+652 | 21133 | روان حمد عبدالمولى امجاور | 168 | 185.60714285714286 | 122 | 67 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+653 | 21139 | محمد عادل صالح الماجري | 162 | 181.78571428571428 | 122 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+654 | 21145 | رويدة المبروك حسن | 193.5 | 182 | 128 | 69.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+655 | 21154 | رتاج مصطفى محمد | 168.5 | 187.64285714285717 | 109 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+656 | 21823 | جمانة عبدالحميد صالح | 181.2 | 206 | 113 | 68 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+657 | 21824 | علي فوزي حمد احميد | 77.5 | 96.67857142857143 | 0 | 22.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+658 | 21825 | منذر عبدالله عبدالرحمن محمد | 207.5 | 200.14285714285717 | 67 | 60.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+659 | 21827 | مهند أحمد نصوح | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+660 | 22222 | عبدالباسط فتحي علي الطويل | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+661 | 22223 | إسراء جمعة جبريل إرحيم | 148 | 158.42857142857144 | 90 | 43.5 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+662 | 22224 | عمر سعد عمر المقريف | 97.5 | 110.78571428571429 | 57 | 32.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+663 | 22225 | محمد جمال عبدالعزيز التواتي | 134 | 140.32142857142858 | 50 | 48.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+664 | 22226 | محمود جبريل عبدالله الحطاني | 163.5 | 182.32142857142858 | 121 | 65 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+665 | 22237 | فاطمة نجيب محمد المبروك | 141 | 0 | 76 | 11.25 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+666 | 22238 | لميس سليمان حماد سالم | 180 | 203.71428571428572 | 132 | 61 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+667 | 22240 | حمزة محمد بشير محمد | 28 | 44.5 | 0 | 13.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+668 | 22242 | المعتصم بالله حسن عبدالنبي سلامة | 133.5 | 146.28571428571428 | 83 | 46.75 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+669 | 22286 | أحلام مفرح عشري | 149.5 | 159.53571428571428 | 120 | 62 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+670 | 224700 | عائدة محمد الناجي النعاس | 147 | 183.67857142857144 | 105 | 60 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+671 | 239300 | حنين يوسف محمد بن خيال | 0 | 0 | 0 | 62 |  |  |  |  |  |  |  |  |  |  |  |  |  |  |
+672 | 212208157 | سليمان احمد محمد ابراهيم | 0 | 0 | 0 | 0 | غياب |  |  |  |  |  |  |  |  |  |  |  |  |  |
+        `;
+
+        // ============================================================
+        // دوال التقدير الخاصة بالسنة الثالثة
+        // ============================================================
+        function getSubjectGrade(score, maxScore, passThreshold, excellent, veryGood, good, pass) {
+            if (score < passThreshold) return "راسب";
+            if (score >= excellent) return "ممتاز";
+            if (score >= veryGood) return "جيد جدا";
+            if (score >= good) return "جيد";
+            if (score >= pass) return "مقبول";
+            return "راسب";
+        }
+
+        // علم الأدوية و علم الأمراض (300)
+        function getGrade300(score) {
+            return getSubjectGrade(score, 300, 180, 255, 225, 195, 180);
+        }
+
+        // علم الجراثيم (200)
+        function getGrade200(score) {
+            return getSubjectGrade(score, 200, 120, 170, 150, 130, 120);
+        }
+
+        // علم الطفيليات (100)
+        function getGrade100(score) {
+            return getSubjectGrade(score, 100, 60, 85, 75, 65, 60);
+        }
+
+        // التقدير العام (من 900)
+        function getOverallGrade(total) {
+            if (total >= 765) return "ممتاز";
+            if (total >= 675) return "جيد جدا";
+            if (total >= 585) return "جيد";
+            if (total >= 540) return "مقبول";
+            return "راسب";
+        }
+
+        function gradeClass(grade) {
+            if (grade === "ممتاز") return "excellent";
+            if (grade === "جيد جدا") return "verygood";
+            if (grade === "جيد") return "good";
+            if (grade === "مقبول") return "pass";
+            return "fail";
+        }
+
+        // ============================================================
+        // معالجة البيانات الخام
+        // ============================================================
+        function parseData(raw) {
+            const lines = raw.split('\n').filter(line => line.trim() !== '');
+            const students = [];
+            for (let line of lines) {
+                const parts = line.split('|').map(p => p.trim());
+                if (parts.length < 6) continue;
+                const id = parts[1];
+                const name = parts[2];
+                const pharma = parseFloat(parts[3]) || 0;
+                const patho = parseFloat(parts[4]) || 0;
+                const bact = parseFloat(parts[5]) || 0;
+                const para = parseFloat(parts[6]) || 0;
+                const absence = parts[7] && parts[7].includes('غياب') ? true : false;
+
+                const finalPharma = absence ? 0 : pharma;
+                const finalPatho = absence ? 0 : patho;
+                const finalBact = absence ? 0 : bact;
+                const finalPara = absence ? 0 : para;
+
+                const pharmaGrade = getGrade300(finalPharma);
+                const pathoGrade = getGrade300(finalPatho);
+                const bactGrade = getGrade200(finalBact);
+                const paraGrade = getGrade100(finalPara);
+
+                const total = finalPharma + finalPatho + finalBact + finalPara;
+
+                const passPharma = finalPharma >= 180;
+                const passPatho = finalPatho >= 180;
+                const passBact = finalBact >= 120;
+                const passPara = finalPara >= 60;
+                const passAll = passPharma && passPatho && passBact && passPara;
+
+                const overallGrade = passAll ? getOverallGrade(total) : "راسب";
+                const passOverall = overallGrade !== "راسب";
+
+                students.push({
+                    id: String(id).trim(),
+                    name: name.trim(),
+                    pharma: finalPharma,
+                    patho: finalPatho,
+                    bact: finalBact,
+                    para: finalPara,
+                    pharmaGrade,
+                    pathoGrade,
+                    bactGrade,
+                    paraGrade,
+                    total,
+                    overallGrade,
+                    passOverall,
+                    absence
+                });
+            }
+            return students;
+        }
+
+        const students = parseData(rawData);
+
+        // ============================================================
+        // إحصائيات عامة
+        // ============================================================
+        const totalStudents = students.length;
+        const passed = students.filter(s => s.passOverall).length;
+        const failed = totalStudents - passed;
+        const successRate = (passed / totalStudents * 100).toFixed(1);
+
+        const gradeDist = { "ممتاز": 0, "جيد جدا": 0, "جيد": 0, "مقبول": 0, "راسب": 0 };
+        students.forEach(s => { gradeDist[s.overallGrade]++; });
+
+        // ============================================================
+        // عرض الإحصائيات
+        // ============================================================
+        document.getElementById('statsCardsHTML').innerHTML = `
+                <div class="stat-card"><div class="title">📊 عدد الطلاب</div><div class="val">${totalStudents}</div></div>
+                <div class="stat-card"><div class="title">✅ الناجحون</div><div class="val">${passed}</div><div class="perc">${(passed/totalStudents*100).toFixed(1)}%</div></div>
+                <div class="stat-card"><div class="title">❌ الراسبون</div><div class="val">${failed}</div><div class="perc">${(failed/totalStudents*100).toFixed(1)}%</div></div>
+                <div class="stat-card success-rate-card"><div class="title">⭐ نسبة النجاح</div><div class="val">${successRate}%</div><div class="perc">✅ من إجمالي الطلاب</div></div>
+                <div class="stat-card"><div class="title">🏆 ممتاز</div><div class="val">${gradeDist["ممتاز"]}</div><div class="perc">${(gradeDist["ممتاز"]/totalStudents*100).toFixed(1)}%</div></div>
+                <div class="stat-card"><div class="title">🌟 جيد جدا</div><div class="val">${gradeDist["جيد جدا"]}</div><div class="perc">${(gradeDist["جيد جدا"]/totalStudents*100).toFixed(1)}%</div></div>
+                <div class="stat-card"><div class="title">👍 جيد</div><div class="val">${gradeDist["جيد"]}</div><div class="perc">${(gradeDist["جيد"]/totalStudents*100).toFixed(1)}%</div></div>
+                <div class="stat-card"><div class="title">✅ مقبول</div><div class="val">${gradeDist["مقبول"]}</div><div class="perc">${(gradeDist["مقبول"]/totalStudents*100).toFixed(1)}%</div></div>
+            `;
+
+        // ============================================================
+        // الرسوم البيانية
+        // ============================================================
+        new Chart(document.getElementById('passFailChart'), {
+            type: 'pie',
+            data: { labels: ['ناجحين', 'راسبين'], datasets: [{ data: [passed, failed], backgroundColor: ['#2ecc71', '#e74c3c'] }] }
+        });
+
+        new Chart(document.getElementById('gradesChart'), {
+            type: 'bar',
+            data: {
+                labels: Object.keys(gradeDist),
+                datasets: [{ label: 'عدد الطلاب', data: Object.values(gradeDist), backgroundColor: '#3a7ca5' }]
+            }
+        });
+
+        // ============================================================
+        // البحث عن الطالب
+        // ============================================================
+        function findStudent(id) {
+            return students.find(s => s.id === String(id).trim());
+        }
+
+        function roundToTwo(num) {
+            return Math.round(num * 100) / 100;
+        }
+
+        function displayStudent(student) {
+            const container = document.getElementById('resultContainer');
+            if (!student) {
+                container.innerHTML = `<div style="text-align:center;padding:50px 20px;color:red;"><span style="font-size:1.5rem;">❌ رقم دراسي غير صحيح أو غير مسجل في الدور الثاني</span><br><span style="font-size:1rem;">النتائج خاصة بأصحاب الأرقام فقط</span></div>`;
+                return;
+            }
+
+            const pharmaR = roundToTwo(student.pharma);
+            const pathoR = roundToTwo(student.patho);
+            const bactR = roundToTwo(student.bact);
+            const paraR = roundToTwo(student.para);
+            const totalR = roundToTwo(student.total);
+
+            const subjects = [
+                { name: "علم الأدوية", icon: "💊", score: pharmaR, grade: student.pharmaGrade, maxScore: 300,
+                    passThreshold: 180 },
+                { name: "علم الأمراض", icon: "🧬", score: pathoR, grade: student.pathoGrade, maxScore: 300,
+                    passThreshold: 180 },
+                { name: "علم الجراثيم", icon: "🦠", score: bactR, grade: student.bactGrade, maxScore: 200,
+                    passThreshold: 120 },
+                { name: "علم الطفيليات", icon: "🐛", score: paraR, grade: student.paraGrade, maxScore: 100,
+                    passThreshold: 60 }
+            ];
+
+            let rowsHtml = '';
+            subjects.forEach(sub => {
+                const totalHtml =
+                    `<span class="numeric-cell">${sub.score}</span><div class="score-info">العظمى: ${sub.maxScore} | النجاح: ${sub.passThreshold}</div>`;
+                rowsHtml += `
+                        <tr>
+                            <td><span>${sub.icon} ${sub.name}</span></td>
+                            <td style="text-align:center">${totalHtml}</td>
+                            <td style="text-align:center"><span class="grade-badge ${gradeClass(sub.grade)}">${sub.grade}</span></td>
+                        </tr>
+                    `;
+            });
+
+            const totalPct = ((totalR / 900) * 100).toFixed(1);
+            const statusColor = student.passOverall ? '#27ae60' : '#e74c3c';
+            const statusText = student.passOverall ? '✅ ناجح' : '❌ راسب';
+
+            container.innerHTML = `
+                    <div class="student-header">
+                        <div class="student-name">${student.name}</div>
+                        <div class="student-id">${student.id}</div>
+                    </div>
+                    <table class="grades-table">
+                        <thead><tr><th>المادة</th><th>المجموع الكلي</th><th>التقدير</th></tr></thead>
+                        <tbody>${rowsHtml}</tbody>
+                    </table>
+                    <div class="final-summary">
+                        <div class="summary-item"><div class="label">المجموع الكلي</div><div class="value grade-value" style="font-size:2rem;">${totalR} / 900</div></div>
+                        <div class="summary-item"><div class="label">التقدير العام</div><div class="value grade-value" style="background: ${student.overallGrade === 'ممتاز' ? '#27ae60' : student.overallGrade === 'جيد جدا' ? '#82e0aa' : student.overallGrade === 'جيد' ? '#3498db' : student.overallGrade === 'مقبول' ? '#f39c12' : '#e74c3c'}; color: white; padding: 10px 25px; border-radius: 50px; font-size: 1.8rem; font-weight: 900;">${student.overallGrade} (${totalPct}%)</div></div>
+                        <div class="summary-item"><div class="label">الحالة</div><div class="value grade-value" style="background: ${statusColor}; color: white; padding: 10px 25px; border-radius: 50px; font-size: 1.8rem; font-weight: 900;">${statusText}</div></div>
+                    </div>
+                    <div class="signatures">
+                        <div class="signature-item"><div class="signature-title">عميد الكلية</div><div class="signature-name">د. فتحي البركي</div></div>
+                        <div class="signature-item"><div class="signature-title">مسجل الكلية</div><div class="signature-name">أ. ونيس الطواح</div></div>
+                        <div class="signature-item"><div class="signature-title">رئيس قسم الدراسة والامتحانات</div><div class="signature-name">د. صالح الاوجلي</div></div>
+                    </div>
+                    <div style="text-align:center; margin-top:20px;"><button class="print-btn" onclick="window.print();">🖨️ طباعة النتيجة</button></div>
+                `;
+        }
+
+        // ============================================================
+        // أحداث البحث
+        // ============================================================
+        document.getElementById('searchBtn').addEventListener('click', function() {
+            const id = document.getElementById('studentIdInput').value.trim();
+            if (!id) {
+                document.getElementById('resultContainer').innerHTML =
+                    '<div style="text-align:center;padding:50px 20px;"><span style="font-size:1.5rem;">⚠️ الرجاء إدخال رقمك الدراسي</span></div>';
+                return;
+            }
+            const student = findStudent(id);
+            displayStudent(student);
+        });
+
+        document.getElementById('studentIdInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('searchBtn').click();
+            }
+        });
+
+        // ============================================================
+        // زر عرض الإحصائيات
+        // ============================================================
+        document.getElementById('statsToggleBtn').addEventListener('click', function() {
+            const container = document.getElementById('statsContainer');
+            container.classList.toggle('active');
+        });
+
+        // ============================================================
+        // رسالة ترحيب
+        // ============================================================
+        console.log('✅ نظام نتائج السنة الثالثة – الدفعة 51 – الدور الثاني جاهز.');
+        console.log(`📊 إجمالي الطلاب: ${totalStudents}, الناجحون: ${passed}, الراسبون: ${failed}, نسبة النجاح: ${successRate}%`);
+    </script>
+</body>
+</html>
